@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.22.1/jquery.validate.min.js" integrity="sha512-qu7dMuIm2f0KcKZ3BOoP4c+Hn+r4E8PbD2Ro4rmKsOyheCxcwhzQpf6SojA76dn+owqfANzfTFUTkGA+HpHjOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="login-page">
+    <main>
+        <div class="login-container">
+
+            <h1>Login</h1>
+
+            <form
+                id="login-js"
+                class="login-form"
+                novalidate>
+
+                <div class="input-container">
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        autocomplete="username">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-envelope-fill input-icon"
+                        viewBox="0 0 16 16">
+
+                        <path
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414z"/>
+
+                        <path
+                            d="M0 4.697v7.104l5.803-3.558z"/>
+
+                        <path
+                            d="M6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586z"/>
+
+                        <path
+                            d="m9.197 8.244 6.753-4.697v7.104z"/>
+
+                    </svg>
+
+                </div>
+
+                <div class="input-container">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        autocomplete="current-password">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-lock-fill input-icon"
+                        viewBox="0 0 16 16">
+
+                        <path
+                            fill-rule="evenodd"
+                            d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+
+                    </svg>
+
+                </div>
+
+                <div class="options">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            name="remember">
+
+                        <h5>Remember me</h5>
+
+                    </label>
+
+                    <a href="#">
+
+                        <b>Forgot password?</b>
+
+                    </a>
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="loginButton">
+                    Login
+                </button>
+
+                <p id="loginMessage" aria-live="polite"></p>
+
+                <div class="register-link">
+
+                    Don't have an account?
+
+                    <a href="register.html">
+                        Register
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+    
+    <script>
+
+        $(document).ready(function () {
+
+            const correctEmail = "admin@gmail.com";
+            const correctPassword = "admin12345";
+
+            const maxAttempts = 3;
+            let failedAttempts = 0;
+
+            const loginButton = $("#loginButton");
+            const loginMessage = $("#loginMessage");
+
+            $("#login-js").validate({
+
+                rules: {
+
+                    email: {
+
+                        required: true,
+
+                        email: true
+
+                    },
+                    password: {
+
+                        required: true,
+
+                        minlength: 8
+
+                    }
+
+                },
+                messages: {
+                    email: {
+                        required: "Email is required.",
+                        email: "Incorrect Email format."
+
+                    },
+                    password: {
+                        required: "Password is required.",
+                        minlength: "Password must be at least 8 characters."
+                    }
+
+                },
+
+                errorElement: "label",
+                errorClass: "error",
+
+                errorPlacement: function (error, element) {
+
+                    error.insertAfter(
+                        element.closest(".input-container")
+                    );
+
+                },
+                highlight: function (element) {
+
+                    $(element)
+                        .addClass("error")
+                        .removeClass("valid");
+
+
+                    $(element)
+                        .closest(".input-container")
+                        .addClass("has-error");
+
+                },
+                unhighlight: function (element) {
+
+                    $(element)
+                        .removeClass("error");
+
+
+                    $(element)
+                        .closest(".input-container")
+                        .removeClass("has-error");
+
+                },
+                submitHandler: function (form) {
+
+                    if (failedAttempts >= maxAttempts) {
+
+                        return false;
+
+                    }
+
+                    const enteredEmail = $("#email")
+                        .val()
+                        .trim();
+
+
+                    const enteredPassword = $("#password")
+                        .val();
+
+                    if (
+                        enteredEmail === correctEmail &&
+                        enteredPassword === correctPassword
+                    ) {
+                        window.location.href = "index.html";
+                        return false;
+                    }
+
+                    failedAttempts++;
+
+                    const remainingAttempts =
+                        maxAttempts - failedAttempts;
+
+                    $("#email")
+                        .addClass("error")
+                        .removeClass("valid");
+
+                    $("#email")
+                        .closest(".input-container")
+                        .addClass("has-error");
+
+                    $("#password")
+                        .addClass("error")
+                        .removeClass("valid");
+
+                    $("#password")
+                        .closest(".input-container")
+                        .addClass("has-error");
+
+                    if (failedAttempts >= maxAttempts) {
+
+                        loginButton
+                            .prop("disabled", true)
+                            .text("Login Disabled");
+
+                        loginMessage
+                            .css("color", "#ff4d4d")
+                            .text(
+                                "Wrong Credentials. No attempts remaining."
+                            );
+
+                        return false;
+
+                    }
+
+                    loginMessage
+                        .css("color", "#ff4d4d")
+                        .text(
+                            "Wrong Credentials. " +
+                            "Attempts remaining: " +
+                            remainingAttempts
+                        );
+
+                    $("#email").val("");
+                    $("#password").val("");
+
+                    return false;
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
